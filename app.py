@@ -1,6 +1,6 @@
 import sys
 
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, Flask
 from sqlalchemy import text
 
 from models import *
