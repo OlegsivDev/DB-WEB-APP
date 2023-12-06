@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Drugs DB App</title>
+    <!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">-->
+    <link href="../static/bulma/css/bulma.css" rel="stylesheet">
+</head>
+<body>
+<section class="section">
+    <div class="container">
+        <h1 class="title is-2 has-text-centered">Выберите таблицу для отображения - </h1>
+    </div>
+</section>
+<div class="has-text-centered">
+    <form action="/database/selectAll" method="post">
+        <div class="select is-primary">
+            <select name="table_choice">
+                <option>diseases</option>
+                <option>diseasesymptoms</option>
+                <option>drugs</option>
+                <option>drugdiseases</option>
+                <option>homemedicine</option>
+                <option>symptoms</option>
+            </select>
+        </div>
+        <br>
+        <button class="button is-link" type="submit">Submit</button>
+    </form>
+</div>
+</body>
+</html>
