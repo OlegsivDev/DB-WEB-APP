@@ -34,16 +34,17 @@
     <div class="container">
         <h1 class="title">Вставить в таблицу: {{ table_name }}</h1>
         <form action="{{ url_for('add_data') }}" method="post">
+            <input type="hidden" name="table_name" value="{{ table_name }}">
             <div class="field">
-                <label class="label" for="table_name">Table Name:</label>
+                <label class="label" for="drugid">Id лекарства:</label>
                 <div class="control">
-                    <input class="input" name="table_name" required type="text">
+                    <input class="input" name="drugid" required type="text">
                 </div>
             </div>
             <div class="field">
-                <label class="label" for="data">Data (comma-separated values):</label>
+                <label class="label" for="quantity">Количество:</label>
                 <div class="control">
-                    <input class="input" name="data" required type="text">
+                    <input class="input" name="quantity" required type="text">
                 </div>
             </div>
             <div class="field">

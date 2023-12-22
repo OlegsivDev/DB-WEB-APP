@@ -8,30 +8,40 @@
     <link href="../static/bulma/css/bulma.css" rel="stylesheet">
 </head>
 <body>
+
+<nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">
+        <a class="navbar-item" href="/show/drugs">Лекарства</a>
+        <a class="navbar-item" href="/show/symptoms">Симптомы</a>
+        <a class="navbar-item" href="/show/diseases">Болезни</a>
+        <a class="navbar-item" href="/show/diseasesymptoms">Болезни-Сиптомы</a>
+        <a class="navbar-item" href="/show/drugdiseases">Лекарства-Болезни</a>
+        <a class="navbar-item" href="/show/homemedicine">Аптечка</a>
+    </div>
+  </div>
+</nav>
+
 <section class="section">
     <div class="container">
-        <h1 class="title is-2 has-text-centered">Выберите таблицу для отображения - </h1>
+        <h1 class="title is-2 has-text-centered">Таблица: {{ table_name }}</h1>
     </div>
 </section>
-<div class="has-text-centered">
-    <form action="/database/selectAll" method="post">
-        <div class="select is-primary">
-            <select name="table_choice">
-                <option>diseases</option>
-                <option>diseasesymptoms</option>
-                <option>drugs</option>
-                <option>drugdiseases</option>
-                <option>homemedicine</option>
-                <option>symptoms</option>
-            </select>
-        </div>
-        <br>
-        <button class="button is-link" type="submit">Submit</button>
-    </form>
+<div class="buttons is-centered">
+    <a class="button is-success" href="/insertForm/{{ table_name.lower() }}">Вставить</a>
+    <a class="button is-danger" href="/deleteForm/{{ table_name.lower() }}">Удалить</a>
 </div>
 <section class="section">
     <div class="container">
-        <h1 class="title">Database Table</h1>
+<!--        <h1 class="title">Database Table</h1>-->
         <table class="table is-fullwidth">
             <thead>
             <tr>
@@ -44,7 +54,7 @@
             {% for item in data %}
             <tr>
                 {% for value in item.values() %}
-                <td>{{ value }}</td>
+                <td><a href="{{table_name.lower()}}/edit/{{ item.get('name') or item.get('medicineid') or item.get('connectionid') }}">{{ value }}</a></td>
                 {% endfor %}
             </tr>
             {% endfor %}
