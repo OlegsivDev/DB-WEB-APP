@@ -28,9 +28,16 @@ def show_table(table_choice):
     user_table_choice = table_choice.capitalize()
     if user_table_choice:
         selected_table = getattr(sys.modules[__name__], user_table_choice)
-        data = selected_table.query.all()
-        data = [item.as_dict() for item in data]
-        return render_template('selectAll.html', data=jsonify(data).json, table_name=user_table_choice)
+
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 10, type=int)
+
+        paginated_data = selected_table.query.paginate(page=page, per_page=per_page)
+        data = paginated_data.items
+        data_list = [item.as_dict() for item in data]
+
+        return render_template('selectAll.html', data=data_list, table_name=user_table_choice,
+                               pagination=paginated_data)
 
 
 
