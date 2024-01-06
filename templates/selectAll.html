@@ -31,13 +31,15 @@
 </nav>
 
 <section class="section">
-    <div class="container">
-        <h1 class="title is-2 has-text-centered">Таблица: {{ table_name }}</h1>
+    <div class="columns is-mobile is-multiline is-centered">
+        <div class="column is-narrow">
+            <h1 class="title is-2 has-text-centered">Таблица: {{ table_name }}</h1>
+        </div>
+        <div class="column is-narrow">
+            <a class="button is-success is-medium" href="/insertForm/{{ table_name.lower() }}">Вставить</a>
+        </div>
     </div>
 </section>
-<div class="buttons is-centered">
-    <a class="button is-success" href="/insertForm/{{ table_name.lower() }}">Вставить</a>
-</div>
 <section class="section">
     <div class="container">
         <table class="table is-fullwidth">
@@ -59,13 +61,17 @@
             </tbody>
         </table>
 
+        <div class="container">
+            <p>Количество элементов: {{ item_count }}</p>
+        </div>
+
         <!-- Pagination buttons -->
         {% if pagination.pages > 1 %}
             <nav class="pagination is-centered" role="navigation">
                 <ul class="pagination-list">
                     {% if pagination.has_prev %}
                         <li>
-                            <a href="?page={{ pagination.prev_num }}&per_page={{ pagination.per_page }}" class="pagination-previous">Prev</a>
+                            <a href="?page={{ pagination.prev_num }}&per_page={{ pagination.per_page }}" class="pagination-previous">Предыдущая</a>
                         </li>
                     {% endif %}
 
@@ -87,13 +93,12 @@
 
                     {% if pagination.has_next %}
                         <li>
-                            <a href="?page={{ pagination.next_num }}&per_page={{ pagination.per_page }}" class="pagination-next">Next</a>
+                            <a href="?page={{ pagination.next_num }}&per_page={{ pagination.per_page }}" class="pagination-next">Следующая</a>
                         </li>
                     {% endif %}
                 </ul>
             </nav>
         {% endif %}
-
     </div>
 </section>
 </body>
