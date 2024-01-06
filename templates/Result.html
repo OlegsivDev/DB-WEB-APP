@@ -9,26 +9,7 @@
 </head>
 <body>
 
-<nav class="navbar is-primary" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-
-  <div id="navbarBasicExample" class="navbar-menu">
-    <div class="navbar-start">
-        <a class="navbar-item" href="/show/drugs">Лекарства</a>
-        <a class="navbar-item" href="/show/symptoms">Симптомы</a>
-        <a class="navbar-item" href="/show/diseases">Болезни</a>
-        <a class="navbar-item" href="/show/diseasesymptoms">Болезни-Сиптомы</a>
-        <a class="navbar-item" href="/show/drugdiseases">Лекарства-Болезни</a>
-        <a class="navbar-item" href="/show/homemedicine">Аптечка</a>
-    </div>
-  </div>
-</nav>
+{% include '_navbar.html' %}
 
 <section class="section">
   <div class="container">

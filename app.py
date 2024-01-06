@@ -39,7 +39,7 @@ def show_table(table_choice):
         data_list = [item.as_dict() for item in data]
 
         return render_template('selectAll.html', data=data_list, table_name=user_table_choice,
-                               pagination=paginated_data, item_count = item_count)
+                               pagination=paginated_data, item_count=item_count)
 
 
 @app.route('/show/diseases', methods=['GET', 'POST'])
@@ -51,7 +51,8 @@ def show_filter():
 
     if value:
         old_filter = value
-        paginated_data = selected_table.query.filter(selected_table.name.like(f'%{value}%')).paginate(page=page, per_page=per_page)
+        paginated_data = selected_table.query.filter(selected_table.name.like(f'%{value}%')).paginate(page=page,
+                                                                                                      per_page=per_page)
     else:
         old_filter = ''
         paginated_data = selected_table.query.paginate(page=page, per_page=per_page)
@@ -61,7 +62,7 @@ def show_filter():
     item_count = selected_table.query.count()
 
     return render_template('selectFilterDiseases.html', data=data_list, table_name='diseases',
-                           pagination=paginated_data, old_filter=old_filter, item_count = item_count)
+                           pagination=paginated_data, old_filter=old_filter, item_count=item_count)
 
 
 @app.route('/show/<table_choice>/edit/<value>', methods=['GET', 'POST'])
@@ -308,65 +309,20 @@ def add_data():
                 # Обработка ошибок
                 return render_template('Result.html', result=f'Error: {str(e)}')
 
-    # try:
-    #     # Формирование и выполнение SQL-запроса
-    #     query = text(f"INSERT INTO {table_name} VALUES ({data});")
-    #     db.session.execute(query)
-    #     db.session.commit()
-    #
-    #     return 'Data added successfully!'
-    # except Exception as e:
-    #     # Обработка ошибок
-    #     return f'Error: {str(e)}', 500
 
-
-# @app.route('/delete_data', methods=['GET', 'POST'])
-# def delete_data():
-#     table_name = request.form['table_name']
-#     condition = request.form['condition']
-#
-#     if table_name not in available_tables:
-#         return 'Invalid table name', 400
-#
-#     if ';' in condition or 'DROP' in condition.upper():
-#         return 'Invalid condition', 400
-#
-#     try:
-#         # Формирование и выполнение SQL-запроса
-#         query = text(f"DELETE FROM {table_name} WHERE {condition};")
-#         db.session.execute(query)
-#         db.session.commit()
-#
-#         return 'Data deleted successfully!'
-#     except Exception as e:
-#         # Обработка ошибок
-#         return f'Error: {str(e)}', 500
-
-
-# @app.route('/update_data', methods=['POST'])
-# def update_data():
-#     table_name = request.form['table_name']
-#     condition_column = request.form['condition_column']
-#     condition_value = request.form['condition_value']
-#     update_column = request.form['update_column']
-#     update_value = request.form['update_value']
-#
-#     # Предотвращение SQL-инъекций
-#     if (';' in condition_value or ';' in update_value or
-#             'DROP' in condition_value.upper() or 'DROP' in update_value.upper()):
-#         return 'Invalid data', 400
-#
-#     try:
-#         # Явное указание SQL-выражения как текста
-#         query = text(f"UPDATE {table_name} SET {update_column} = :update_value "
-#                      f"WHERE {condition_column} = :condition_value")
-#         db.session.execute(query, {'update_value': update_value, 'condition_value': condition_value})
-#         db.session.commit()
-#
-#         return 'Data updated successfully!'
-#     except Exception as e:
-#         # Обработка ошибок
-#         return f'Error: {str(e)}', 500
+@app.route('/statistics', methods=['GET', 'POST'])
+def show_statistics():
+    drugs_amount = db.session.query(Drugs).count()
+    symptoms_amount = db.session.query(Symptoms).count()
+    diseases_amount = db.session.query(Diseases).count()
+    diseases_symptoms_amount = db.session.query(Diseasesymptoms).count()
+    drug_diseases_amount = db.session.query(Drugdiseases).count()
+    home_medicines_amount = db.session.query(Homemedicine).count()
+    database_items_amount = drugs_amount + symptoms_amount + diseases_amount + diseases_symptoms_amount + drug_diseases_amount + home_medicines_amount
+    return render_template('Statistics.html', drugs_amount=drugs_amount, symptoms_amount=symptoms_amount,
+                           diseases_amount=diseases_amount, diseases_symptoms_amount=diseases_symptoms_amount,
+                           drug_diseases_amount=drug_diseases_amount, home_medicines_amount=home_medicines_amount,
+                           database_items_amount=database_items_amount)
 
 
 if __name__ == "__main__":
