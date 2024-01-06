@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Drugs DB App</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+<!--    <link href="../static/bulma/css/bulma.css" rel="stylesheet">-->
+</head>
+<body>
+
+<nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">
+        <a class="navbar-item" href="/show/drugs">Лекарства</a>
+        <a class="navbar-item" href="/show/symptoms">Симптомы</a>
+        <a class="navbar-item" href="/show/diseases">Болезни</a>
+        <a class="navbar-item" href="/show/diseasesymptoms">Болезни-Сиптомы</a>
+        <a class="navbar-item" href="/show/drugdiseases">Лекарства-Болезни</a>
+        <a class="navbar-item" href="/show/homemedicine">Аптечка</a>
+    </div>
+  </div>
+</nav>
+
+<section class="section">
+    <div class="container">
+        <h1 class="title is-2 has-text-centered">Таблица: {{ table_name }}</h1>
+    </div>
+</section>
+<div class="buttons is-centered">
+    <a class="button is-success" href="/insertForm/{{ table_name.lower() }}">Вставить</a>
+</div>
+<div class="container">
+   <h1 class="title is-size-6">Фильтр по имени:</h1>
+   <form action="{{ url_for('show_filter') }}" method="post">
+      <div class="field is-grouped">
+         <div class="control">
+            <input class="input" type="text" name="filter" value="{{ old_filter }}">
+         </div>
+         <div class="control">
+            <button class="button is-primary" type="submit">Применить</button>
+         </div>
+      </div>
+   </form>
+</div>
+<section class="section">
+    <div class="container">
+    {% if data %}
+        <table class="table is-fullwidth">
+            <thead>
+            <tr>
+                {% for key in data[0].keys() %}
+                <th>{{ key }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in data %}
+            <tr>
+                {% for value in item.values() %}
+                <td><a href="{{table_name.lower()}}/edit/{{ item.get('name') or item.get('medicineid') or item.get('connectionid') }}">{{ value }}</a></td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p>Ничего не найдено</p>
+        {% endif %}
+
+        <!-- Pagination buttons -->
+        {% if pagination.pages > 1 %}
+            <nav class="pagination is-centered" role="navigation">
+                <ul class="pagination-list">
+                    {% if pagination.has_prev %}
+                        <li>
+                            <a href="?page={{ pagination.prev_num }}&per_page={{ pagination.per_page }}" class="pagination-previous">Prev</a>
+                        </li>
+                    {% endif %}
+
+                    {% for num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=3) %}
+                        {% if num %}
+                            {% if num == pagination.page %}
+                                <li>
+                                    <a href="?page={{ num }}&per_page={{ pagination.per_page }}" class="pagination-link is-current">{{ num }}</a>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a href="?page={{ num }}&per_page={{ pagination.per_page }}" class="pagination-link">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% else %}
+                            <li><span class="pagination-ellipsis">&hellip;</span></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pagination.has_next %}
+                        <li>
+                            <a href="?page={{ pagination.next_num }}&per_page={{ pagination.per_page }}" class="pagination-next">Next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+
+    </div>
+</section>
+</body>
+</html>

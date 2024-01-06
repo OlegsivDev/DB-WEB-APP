@@ -40,6 +40,26 @@ def show_table(table_choice):
                                pagination=paginated_data)
 
 
+@app.route('/show/diseases', methods=['GET', 'POST'])
+def show_filter():
+    value = request.form.get('filter')
+    selected_table = Diseases
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+
+    if value:
+        old_filter = value
+        paginated_data = selected_table.query.filter(selected_table.name.like(f'%{value}%')).paginate(page=page, per_page=per_page)
+    else:
+        old_filter = ''
+        paginated_data = selected_table.query.paginate(page=page, per_page=per_page)
+    data = paginated_data.items
+    data_list = [item.as_dict() for item in data]
+
+    return render_template('selectFilterDiseases.html', data=data_list, table_name='diseases',
+                           pagination=paginated_data, old_filter=old_filter)
+
+
 @app.route('/show/<table_choice>/edit/<value>', methods=['GET', 'POST'])
 def show_edit_value(table_choice, value):
     match table_choice:
@@ -182,7 +202,6 @@ def delete_value(table_choice, value):
                     return render_template('Result.html', result='Данные удалены успешно!')
             except Exception as e:
                 return render_template('Result.html', result=f'Error: {str(e)}')
-
 
 
 @app.route('/insertForm/<table_choice>')
