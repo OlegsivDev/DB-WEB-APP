@@ -4,8 +4,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>Drugs DB App</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-<!--    <link href="../static/bulma/css/bulma.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 </head>
 <body>
 
@@ -31,10 +30,24 @@
 </nav>
 
 <section class="section">
-  <div class="container">
-    <h1 class="title is-1 has-text-centered">{{ result }}</h1>
-  </div>
+    <div class="container">
+        <h1 class="title">Изменить значение в таблице: {{ table_name }}</h1>
+        <form action="{{ url_for('edit_value') }}" method="post">
+            <input type="hidden" name="table_name" value="{{ table_name }}">
+            <input type="hidden" name="old_name" value="{{ disease_name }}">
+            <div class="field">
+                <label class="label">Название болезни:</label>
+                <div class="control">
+                    <input class="input" name="new_name" required type="text" value="{{ disease_name }}">
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-primary" type="submit">Изменить</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </section>
-
 </body>
 </html>

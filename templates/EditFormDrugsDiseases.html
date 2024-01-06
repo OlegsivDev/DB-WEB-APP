@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Drugs DB App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+
+<nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">
+        <a class="navbar-item" href="/show/drugs">Лекарства</a>
+        <a class="navbar-item" href="/show/symptoms">Симптомы</a>
+        <a class="navbar-item" href="/show/diseases">Болезни</a>
+        <a class="navbar-item" href="/show/diseasesymptoms">Болезни-Сиптомы</a>
+        <a class="navbar-item" href="/show/drugdiseases">Лекарства-Болезни</a>
+        <a class="navbar-item" href="/show/homemedicine">Аптечка</a>
+    </div>
+  </div>
+</nav>
+
+<section class="section">
+    <div class="container">
+        <h1 class="title">Изменить значение в таблице: {{ table_name }}</h1>
+        <form action="{{ url_for('edit_value') }}" method="post">
+            <input type="hidden" name="table_name" value="{{ table_name }}">
+            <input type="hidden" name="connection_id" value="{{ connection_id }}">
+            <div class="field">
+                <label class="label">Id лекарства:</label>
+                <div class="control">
+                    <input class="input" name="new_drug_id" required type="text" value="{{ old_drug_id }}">
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Id болезни:</label>
+                <div class="control">
+                    <input class="input" name="new_disease_id" required type="text" value="{{ old_disease_id }}">
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <div class="buttons">
+                    <button class="button is-primary" type="submit">Изменить</button>
+                        <a class="button is-danger" href="/delete_value/{{ table_name.lower() }}/{{ connection_id }}">Удалить</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>
