@@ -224,7 +224,6 @@ def add_data_form(table_choice):
             return render_template('InsertFormDrugdiseases.html', table_name=table_choice)
         case 'homemedicine':
             return render_template('InsertFormHomemedicine.html', table_name=table_choice)
-    # return render_template('InsertForm.html', table_name=table_choice)
 
 
 @app.route('/database/insert', methods=['GET', 'POST'])
@@ -235,6 +234,11 @@ def add_data():
         case 'symptoms':
             try:
                 data = request.form['data']
+
+                existing_data = db.session.query(Symptoms).filter(Symptoms.name == data).first()
+                if existing_data:
+                    return render_template('Result.html', result='Данные уже существуют!')
+
                 # Формирование и выполнение SQL-запроса
                 query = text(f"INSERT INTO symptoms (name) VALUES ('{data}');")
                 db.session.execute(query)
@@ -247,8 +251,12 @@ def add_data():
         case 'drugs':
             try:
                 data = request.form['data']
+
+                existing_data = db.session.query(Drugs).filter(Drugs.name == data).first()
+                if existing_data:
+                    return render_template('Result.html', result='Данные уже существуют!')
                 expiredate = request.form['date']
-                # Формирование и выполнение SQL-запроса
+
                 query = text(f"INSERT INTO drugs (name, expiredate) VALUES ('{data}', '{expiredate}');")
                 db.session.execute(query)
                 db.session.commit()
@@ -260,7 +268,10 @@ def add_data():
         case 'diseases':
             try:
                 data = request.form['data']
-                # Формирование и выполнение SQL-запроса
+
+                existing_data = db.session.query(Diseases).filter(Diseases.name == data).first()
+                if existing_data:
+                    return render_template('Result.html', result='Данные уже существуют!')
                 query = text(f"INSERT INTO diseases (name) VALUES ('{data}');")
                 db.session.execute(query)
                 db.session.commit()
@@ -271,9 +282,13 @@ def add_data():
                 return render_template('Result.html', result=f'Error: {str(e)}')
         case 'diseasesymptoms':
             try:
+                existing_data = db.session.query(Diseasesymptoms).filter(Diseasesymptoms.diseaseid == request.form['diseaseid']).filter(Diseasesymptoms.symptomid == request.form['symptomid']).first()
+                if existing_data:
+                    return render_template('Result.html', result='Данные уже существуют!')
+
                 diseaseid = request.form['diseaseid']
                 symptomid = request.form['symptomid']
-                # Формирование и выполнение SQL-запроса
+
                 query = text(f"INSERT INTO diseasesymptoms (diseaseid, symptomid) VALUES ({diseaseid}, {symptomid});")
                 db.session.execute(query)
                 db.session.commit()
@@ -284,6 +299,11 @@ def add_data():
                 return render_template('Result.html', result=f'Error: {str(e)}')
         case 'drugdiseases':
             try:
+
+                existing_data = db.session.query(Drugdiseases).filter(Drugdiseases.drugid == request.form['drugid']).filter(Drugdiseases.diseaseid == request.form['diseaseid']).first()
+                if existing_data:
+                    return render_template('Result.html', result='Данные уже существуют!')
+
                 drugid = request.form['drugid']
                 diseaseid = request.form['diseaseid']
                 # Формирование и выполнение SQL-запроса
@@ -297,6 +317,10 @@ def add_data():
                 return render_template('Result.html', result=f'Error: {str(e)}')
         case 'homemedicine':
             try:
+
+                existing_data = db.session.query(Homemedicine).filter(Homemedicine.drugid == request.form['drugid']).first()
+                if existing_data:
+                    return render_template('Result.html', result='Данные уже существуют!')
                 drugid = request.form['drugid']
                 quantity = request.form['quantity']
                 # Формирование и выполнение SQL-запроса
