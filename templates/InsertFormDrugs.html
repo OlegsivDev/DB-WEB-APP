@@ -17,13 +17,13 @@
         <form action="{{ url_for('add_data') }}" method="post">
             <input type="hidden" name="table_name" value="{{ table_name }}">
             <div class="field">
-                <label class="label" for="data">Название лекарства:</label>
+                <label class="label">Название лекарства:</label>
                 <div class="control">
                     <input class="input" name="data" required type="text">
                 </div>
             </div>
             <div class="field">
-                <label class="label" for="date">Дата истечения срока годности:</label>
+                <label class="label">Дата истечения срока годности:</label>
                 <div class="control">
                     <input class="input" name="date" required type="text">
                 </div>

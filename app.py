@@ -1,12 +1,9 @@
 import sys
 
-from flask import render_template, request, jsonify, Flask
+from flask import Flask, render_template, request
 from sqlalchemy import text
 
 from models import *
-
-from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__, static_url_path='/static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1337@localhost/postgres'
@@ -97,8 +94,6 @@ def show_edit_value(table_choice, value):
 @app.route('/edit_value', methods=['GET', 'POST'])
 def edit_value():
     table_choice = request.form['table_name']
-    user_table_choice = table_choice.capitalize()
-    # selected_table = getattr(sys.modules[__name__], user_table_choice)
     match table_choice:
         case 'symptoms':
             old_name = request.form['old_name']
@@ -239,14 +234,12 @@ def add_data():
                 if existing_data:
                     return render_template('Result.html', result='Данные уже существуют!')
 
-                # Формирование и выполнение SQL-запроса
                 query = text(f"INSERT INTO symptoms (name) VALUES ('{data}');")
                 db.session.execute(query)
                 db.session.commit()
 
                 return render_template('Result.html', result='Данные добавленны успешно!')
             except Exception as e:
-                # Обработка ошибок
                 return render_template('Result.html', result=f'Error: {str(e)}')
         case 'drugs':
             try:
@@ -263,7 +256,6 @@ def add_data():
 
                 return render_template('Result.html', result='Данные добавленны успешно!')
             except Exception as e:
-                # Обработка ошибок
                 return render_template('Result.html', result=f'Error: {str(e)}')
         case 'diseases':
             try:
@@ -278,11 +270,12 @@ def add_data():
 
                 return render_template('Result.html', result='Данные добавленны успешно!')
             except Exception as e:
-                # Обработка ошибок
                 return render_template('Result.html', result=f'Error: {str(e)}')
         case 'diseasesymptoms':
             try:
-                existing_data = db.session.query(Diseasesymptoms).filter(Diseasesymptoms.diseaseid == request.form['diseaseid']).filter(Diseasesymptoms.symptomid == request.form['symptomid']).first()
+                existing_data = db.session.query(Diseasesymptoms).filter(
+                    Diseasesymptoms.diseaseid == request.form['diseaseid']).filter(
+                    Diseasesymptoms.symptomid == request.form['symptomid']).first()
                 if existing_data:
                     return render_template('Result.html', result='Данные уже существуют!')
 
@@ -295,42 +288,42 @@ def add_data():
 
                 return render_template('Result.html', result='Данные добавленны успешно!')
             except Exception as e:
-                # Обработка ошибок
                 return render_template('Result.html', result=f'Error: {str(e)}')
         case 'drugdiseases':
             try:
 
-                existing_data = db.session.query(Drugdiseases).filter(Drugdiseases.drugid == request.form['drugid']).filter(Drugdiseases.diseaseid == request.form['diseaseid']).first()
+                existing_data = db.session.query(Drugdiseases).filter(
+                    Drugdiseases.drugid == request.form['drugid']).filter(
+                    Drugdiseases.diseaseid == request.form['diseaseid']).first()
                 if existing_data:
                     return render_template('Result.html', result='Данные уже существуют!')
 
                 drugid = request.form['drugid']
                 diseaseid = request.form['diseaseid']
-                # Формирование и выполнение SQL-запроса
+
                 query = text(f"INSERT INTO drugdiseases (drugid, diseaseid) VALUES ({drugid}, {diseaseid});")
                 db.session.execute(query)
                 db.session.commit()
 
                 return render_template('Result.html', result='Данные добавленны успешно!')
             except Exception as e:
-                # Обработка ошибок
                 return render_template('Result.html', result=f'Error: {str(e)}')
         case 'homemedicine':
             try:
 
-                existing_data = db.session.query(Homemedicine).filter(Homemedicine.drugid == request.form['drugid']).first()
+                existing_data = db.session.query(Homemedicine).filter(
+                    Homemedicine.drugid == request.form['drugid']).first()
                 if existing_data:
                     return render_template('Result.html', result='Данные уже существуют!')
                 drugid = request.form['drugid']
                 quantity = request.form['quantity']
-                # Формирование и выполнение SQL-запроса
+
                 query = text(f"INSERT INTO homemedicine (drugid, quantity) VALUES ({drugid}, {quantity});")
                 db.session.execute(query)
                 db.session.commit()
 
                 return render_template('Result.html', result='Данные добавленны успешно!')
             except Exception as e:
-                # Обработка ошибок
                 return render_template('Result.html', result=f'Error: {str(e)}')
 
 
